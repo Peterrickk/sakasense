@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: sakasense-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn mysite.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://sakasense-frontend.onrender.com,https://sakasense.com,http://localhost:3000,http://localhost:3001
+
+  - type: web
+    name: sakasense-frontend
+    env: node
+    buildCommand: cd web && npm install && npm run build
+    startCommand: cd web && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://sakasense-backend.onrender.com/api
+      - key: NEXT_PUBLIC_MAIN_SITE_URL
+        value: https://sakasense.com
+    autoDeploy: true
+
+databases:
+  - name: sakasense-db
+    plan: free

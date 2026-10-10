@@ -1,0 +1,174 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Dark-only theme with a green tint. There is intentionally no light theme or theme switch. */
+@theme {
+  --color-bg: #050b08;
+  --color-surface: #0b1611;
+  --color-surface-2: #11211a;
+  --color-border: rgba(134, 239, 172, 0.12);
+  --color-text: #e8f5ec;
+  --color-text-muted: #8fa89a;
+  --color-primary: #22e07a;
+  --color-primary-glow: #5bffa6;
+  --color-accent: #b8f35a;
+  --color-soil: #8b5e3c;
+  --color-info: #38bdf8;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  /* Text that sits on a primary-green surface (buttons). */
+  --color-on-primary: #04130b;
+
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --radius-card: 12px;
+  --shadow-glow: 0 0 40px -8px rgba(34, 224, 122, 0.45);
+
+  --animate-pulse-line: pulse-line 3s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes pulse-line {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-bg);
+  /* Subtle green glow behind the page. */
+  background-image:
+    radial-gradient(ellipse 90% 45% at 50% -10%, rgba(34, 224, 122, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 30%, rgba(184, 243, 90, 0.03), transparent 70%);
+  background-attachment: fixed;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  font-size: 1rem;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 1.0625rem;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary-glow);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+@utility text-h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+}
+@utility text-h2 {
+  font-size: clamp(1.875rem, 4vw, 3rem);
+}
+@utility text-h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility gradient-text {
+  background-image: linear-gradient(135deg, #22e07a 0%, #b8f35a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility bg-brand-gradient {
+  background-image: linear-gradient(135deg, #22e07a 0%, #b8f35a 100%);
+}
+
+@utility glass {
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--color-border);
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Typography plugin wired to the theme tokens. */
+.prose {
+  --tw-prose-body: var(--color-text);
+  --tw-prose-headings: var(--color-text);
+  --tw-prose-lead: var(--color-text-muted);
+  --tw-prose-links: var(--color-primary);
+  --tw-prose-bold: var(--color-text);
+  --tw-prose-counters: var(--color-text-muted);
+  --tw-prose-bullets: var(--color-primary);
+  --tw-prose-hr: var(--color-border);
+  --tw-prose-quotes: var(--color-text);
+  --tw-prose-quote-borders: var(--color-primary);
+  --tw-prose-captions: var(--color-text-muted);
+  --tw-prose-code: var(--color-accent);
+  --tw-prose-pre-code: var(--color-text);
+  --tw-prose-pre-bg: var(--color-surface);
+  --tw-prose-th-borders: var(--color-border);
+  --tw-prose-td-borders: var(--color-border);
+}

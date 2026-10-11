@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
   // Exposed so plain <img> and next/image `src` values can be prefixed (basePath only applies to links).
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
 
+  // Serve images straight from /public: on the multi-service Vercel deployment (vercel.json) the
+  // /_next/image optimizer route returns 404, which left every <Image> blank.
   images: {
+    unoptimized: true,
     domains: [
       'images.unsplash.com',
       'localhost',

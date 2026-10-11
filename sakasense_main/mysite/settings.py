@@ -28,7 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# On Vercel this app is the internal `api` service: it has no public route and is reached only by the
+# dashboard over a service binding, whose hostname is generated per deployment. So accept any Host
+# there unless ALLOWED_HOSTS is set explicitly.
+ON_VERCEL = bool(os.environ.get('VERCEL'))
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*' if ON_VERCEL else 'localhost,127.0.0.1').split(',')
 
 # SECRET_KEY must come from the environment in production (see .env.example).
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -178,6 +182,7 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_REDIRECT_EXEMPT = []
-    SECURE_SSL_REDIRECT = True
+    # Vercel already enforces HTTPS publicly; redirecting internal binding calls would break them.
+    SECURE_SSL_REDIRECT = not ON_VERCEL
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

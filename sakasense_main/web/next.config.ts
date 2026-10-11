@@ -1,17 +1,13 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  async rewrites() {
-    // Use environment variable for base URL, fallback to localhost for development
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000';
+// The dashboard is served under /app on the same domain as the main website (see the repo-root
+// vercel.json). Vercel passes the full path through, so Next.js must know the prefix.
+const basePath = "/app";
 
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${baseUrl}/api/:path*`,
-      },
-    ];
-  },
+const nextConfig: NextConfig = {
+  basePath,
+  // Exposed so plain <img> and next/image `src` values can be prefixed (basePath only applies to links).
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
 
   images: {
     domains: [

@@ -1,8 +1,12 @@
-/** Links between the SakaSense dashboard and the main SakaSense website. Set via env in production. */
-export const MAIN_SITE_URL = (process.env.NEXT_PUBLIC_MAIN_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+/**
+ * Links between the SakaSense dashboard and the main SakaSense website.
+ * Both are served from one domain on Vercel (dashboard under /app), so the default is same-origin.
+ * Use plain <a> for these, not next/link, or basePath gets prepended. Override for local dev.
+ */
+export const MAIN_SITE_URL = (process.env.NEXT_PUBLIC_MAIN_SITE_URL ?? "").replace(/\/$/, "");
 
 export const mainSite = {
-  home: MAIN_SITE_URL,
+  home: MAIN_SITE_URL || "/",
   device: `${MAIN_SITE_URL}/products/sakasense-device`,
   app: `${MAIN_SITE_URL}/ecosystem#mobile-app`,
   guidebook: `${MAIN_SITE_URL}/ecosystem#guidebook`,

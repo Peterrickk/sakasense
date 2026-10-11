@@ -6,6 +6,7 @@ import type { Plot } from "@/lib/types";
 import { getCropVisual, statusAccent, statusRing } from "@/lib/crops";
 import { StatusPill } from "./StatusPill";
 import { cn } from "@/lib/utils";
+import { asset } from "@/lib/basePath";
 
 export function PlotRectangle({
   plot,
@@ -51,7 +52,7 @@ export function PlotRectangle({
       {imgOk ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={visual.image}
+          src={asset(visual.image)}
           alt={visual.label}
           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
           loading="lazy"

@@ -17,6 +17,7 @@ const plans = [
     ],
     cta: "Get Started",
     href: "/register",
+    mainSite: false,
     highlight: false,
   },
   {
@@ -32,6 +33,7 @@ const plans = [
     ],
     cta: "Start Farmer Pro",
     href: "/register",
+    mainSite: false,
     highlight: true,
   },
   {
@@ -47,6 +49,7 @@ const plans = [
     ],
     cta: "Contact us",
     href: mainSite.contact,
+    mainSite: true,
     highlight: false,
   },
 ];
@@ -102,16 +105,23 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={plan.href}
-                className={`mt-8 block rounded-full py-3 text-center text-sm font-semibold ${
+              {(() => {
+                const className = `mt-8 block rounded-full py-3 text-center text-sm font-semibold ${
                   plan.highlight
                     ? "bg-sakasense-green text-sakasense-on-green hover:bg-sakasense-green-dark"
                     : "border border-sakasense-border bg-sakasense-surface-2 text-sakasense-ink"
-                }`}
-              >
-                {plan.cta}
-              </Link>
+                }`;
+                // Main-website links use <a> so next/link doesn't prepend the dashboard's basePath.
+                return plan.mainSite ? (
+                  <a href={plan.href} className={className}>
+                    {plan.cta}
+                  </a>
+                ) : (
+                  <Link href={plan.href} className={className}>
+                    {plan.cta}
+                  </Link>
+                );
+              })()}
             </div>
           ))}
         </div>

@@ -2,11 +2,14 @@
  * Single source of truth for company details, contact info and ecosystem links.
  * Every [PLACEHOLDER] value here must be replaced by the business owner.
  */
-/** Where the SakaSense web dashboard (sakasense_main/web) is hosted. */
-const dashboardUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:3001").replace(
-  /\/$/,
-  "",
-);
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+/**
+ * Where the SakaSense web dashboard (sakasense_main/web) is hosted. On Vercel it is the `dashboard`
+ * service under /app on this same domain (see vercel.json). Absolute because emails use it too.
+ */
+const dashboardUrl = (
+  process.env.NEXT_PUBLIC_DASHBOARD_URL ?? `${siteUrl.replace(/\/$/, "")}/app`
+).replace(/\/$/, "");
 
 export const siteConfig = {
   name: "SakaSense Venture Solutions",
@@ -14,7 +17,7 @@ export const siteConfig = {
   tagline: "Smart Soil Intelligence",
   description:
     "SakaSense is an IoT soil sensor that reads pH, nitrogen, phosphorus, and potassium, recommends crops and fertilizer, and syncs to a mobile app and web dashboard.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: siteUrl,
   currency: "PHP",
   locale: "en-PH",
   contact: {

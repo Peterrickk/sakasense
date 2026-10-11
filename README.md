@@ -5,20 +5,21 @@ Built from `SAKASENSE_WEBSITE_PLAN.md`.
 
 ## Two apps, one system
 
-| App                              | Folder                                                                       | Local URL                         | Role                                                           |
-| -------------------------------- | ---------------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------- |
-| Main website                     | repo root                                                                    | http://localhost:3000             | Company site, the SakaSense Device page, order checkout        |
-| Web dashboard (`sakasense_main`) | `sakasense_main/web` (Next.js) and `sakasense_main/hello`, `mysite` (Django) | http://localhost:3001 (API :8000) | Farmers with Wi-Fi: plots, history, alerts, reports, Guidebook |
+| App                              | Folder                                                                       | Local URL                             | Role                                                           |
+| -------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------- | -------------------------------------------------------------- |
+| Main website                     | repo root                                                                    | http://localhost:3000                 | Company site, the SakaSense Device page, order checkout        |
+| Web dashboard (`sakasense_main`) | `sakasense_main/web` (Next.js) and `sakasense_main/hello`, `mysite` (Django) | http://localhost:3001/app (API :8000) | Farmers with Wi-Fi: plots, history, alerts, reports, Guidebook |
 
 The three products are the **SakaSense Device** (the only item sold in the shop), the **SakaSense App**, and the **SakaSense Web Dashboard**.
 
 How they connect:
 
-- Website → dashboard: `NEXT_PUBLIC_DASHBOARD_URL` (default http://localhost:3001) feeds `siteConfig.links` (Open dashboard, Create account, Log in, Guidebook).
-- Dashboard → website: `NEXT_PUBLIC_MAIN_SITE_URL` (default http://localhost:3000) feeds the "← SakaSense website" and "Get the SakaSense Device" links (`sakasense_main/web/src/lib/site.ts`).
+- Website → dashboard: `NEXT_PUBLIC_DASHBOARD_URL` (default `NEXT_PUBLIC_SITE_URL` + `/app`) feeds `siteConfig.links` (Open dashboard, Create account, Log in, Guidebook).
+- Dashboard → website: `NEXT_PUBLIC_MAIN_SITE_URL` (default: same origin) feeds the "← SakaSense website" and "Get the SakaSense Device" links (`sakasense_main/web/src/lib/site.ts`).
 - Shared brand: same logo and name. Django CORS allows both origins (see `sakasense_main/render.yaml`).
 - Dashboard setup: `cd sakasense_main/web && npm install`. API: create a Python venv, `pip install -r sakasense_main/requirements.txt`, then `python manage.py migrate` inside `sakasense_main`.
-- Run both: `npm run dev` (website), `npm run dev:dashboard`, and `npm run dev:api`.
+- Run both: `npm run dev` (website), `npm run dev:dashboard`, and `npm run dev:api`. Or run all three together, routed like production, with `vercel dev`.
+- Deploy: one Vercel project with services (`vercel.json`): `website` serves `/`, `dashboard` serves `/app` (Next.js `basePath`), and the Django `api` is internal-only. The dashboard's `/app/api/*` route handlers reach Django through the `SAKASENSE_API_URL` binding (`sakasense_main/web/src/lib/api.ts`).
 - The dashboard's login is still its demo account (`maria@sakasense.demo` / `sakasense123`, stored in the browser). It is **not** linked to website accounts yet; real shared sign-in is the next step.
 
 ## Run it

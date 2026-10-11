@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import { apiUrl } from "@/lib/api";
 
 /**
  * Proxy to Django backend for device ingestion.
- * Uses Next.js rewriting to forward to the configured backend.
+ * Calls the Django `api` service through the SAKASENSE_API_URL binding.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -23,8 +24,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Forward to our own API endpoint (gets rewritten by next.config.js)
-    const response = await fetch(new URL('/api/device/ingest/', request.url), {
+    const response = await fetch(apiUrl("api/device/ingest/"), {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",

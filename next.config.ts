@@ -29,7 +29,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  images: { formats: ["image/avif", "image/webp"] },
+  // Serve images straight from /public: on the multi-service Vercel deployment (vercel.json) the
+  // /_next/image optimizer route returns 404, which left every <Image> blank.
+  images: { unoptimized: true },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
